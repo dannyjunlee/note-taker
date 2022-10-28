@@ -10,9 +10,9 @@ notesRouter.get('/', (req, res) => {
 
 // POST
 notesRouter.post('/', (req, res) => {
-    console.info(`${req.method} request received to add notes`);
+    console.info(`${req.method} request received to add a note`);
 
-    const {title, text} = req.body;
+    const { title, text } = req.body;
 
     if (title && text) {
         const newNote = {
@@ -20,20 +20,20 @@ notesRouter.post('/', (req, res) => {
             text
         };
 
-        fs.readFile('../db/db.json', (err, data) => {
-            if (err) res.status(400).json({err});
-            const json = JSON.parse(data);
-            json.push(newNote);
-            fs.writeFileSync('../db/db.json', JSON.stringify(json));
+        fs.readFile('./db/db.json', (err, data) => {
+            // if (err) res.status(400).json({err});
+            const notes = JSON.parse(data);
+            notes.push(newNote);
+            fs.writeFileSync('./db/db.json', JSON.stringify(notes));
         });
 
         const response = {
-            status: "success",
+            status: 'success',
             body: newNote
         };
 
         console.log(response);
-        res.json(response);
+        res.status(200).json(response);
     } else {
         res.status(400).json('Error in posting note');
     };
